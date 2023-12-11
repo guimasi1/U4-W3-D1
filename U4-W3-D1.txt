@@ -1,0 +1,39 @@
+1) SELECT * FROM public."clienti" WHERE nome='mario'
+
+2) SELECT * FROM public."clienti" WHERE anno_di_nascita='1982'
+
+3) SELECT COUNT(*) FROM public."fatture" WHERE iva = 20
+
+4) SELECT * FROM public."prodotti" 
+WHERE in_commercio = true OR in_produzione = true AND data_attivazione > '1-1-2017'
+
+5) SELECT * FROM public."fatture" 
+JOIN public."clienti" ON fatture.numero_fattura = clienti.numero_cliente
+WHERE importo < 1000 
+
+6)SELECT * FROM public."fatture" 
+JOIN public."fornitori" ON fatture.numero_fornitore = fornitori.numero_fornitore 
+ 
+
+7)SELECT COUNT(*),EXTRACT(YEAR FROM data_fattura),iva FROM fatture
+GROUP BY EXTRACT(YEAR FROM data_fattura), iva
+HAVING iva = 20
+
+8)SELECT EXTRACT(YEAR FROM data_fattura),count(*),sum(importo) FROM fatture
+GROUP BY EXTRACT(YEAR FROM data_fattura)
+
+EXTRA) SELECT EXTRACT(YEAR FROM data_fattura),tipologia,count(*) FROM fatture
+GROUP BY EXTRACT(YEAR FROM data_fattura),tipologia
+HAVING tipologia = 'A' AND count(fatture.tipologia = 'A') > 2
+
+EXTRA) SELECT regione_residenza, sum(importo) FROM fatture
+JOIN clienti ON id_cliente = numero_cliente 
+GROUP BY clienti.regione_residenza
+
+EXTRA) SELECT clienti.anno_di_nascita,count(DISTINCT clienti),fatture.importo FROM fatture
+JOIN clienti ON id_cliente = numero_cliente 
+WHERE fatture.importo > 50
+GROUP BY clienti.anno_di_nascita,fatture.importo
+HAVING clienti.anno_di_nascita = 1980;
+
+
